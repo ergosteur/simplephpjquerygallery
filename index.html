@@ -1,0 +1,49 @@
+<html>
+<head>
+<meta name="viewport" content="width=device-width">
+<meta name="viewport" content="initial-scale=1.0">
+<script src="src/js/jquery-2.2.4.min.js"></script>
+<link rel="stylesheet" href="src/css/justifiedGallery.min.css" />
+<script src="src/js/jquery.justifiedGallery.min.js"></script>
+<script src="src/js/jquery.swipebox.min.js"></script>
+<link rel="stylesheet" href="src/css/swipebox.maximgsize.css">
+<style>
+.button {
+    padding: 10px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    font-size: 16px;
+    width: 200px;
+    margin: auto;
+    cursor: pointer;
+}
+</style>
+</head>
+<body>
+<div id="gallery">
+</div>
+<div><input type="button" class="button" value="Load more..." /></div>
+<script>
+var jsPage = 0;
+var jsPageSize = 25;
+$.get('paginate.php', {page: jsPage, pagesize: jsPageSize} )
+	.done(function (data) {
+		$('#gallery').append(data);
+		$("#gallery").justifiedGallery()
+			.on('jg.complete', function () {
+				$('.swipeboxImg').swipebox();
+				});
+		jsPage++;
+	});
+$(":button").click(function() {
+	$.get('paginate.php', {page: jsPage, pagesize: jsPageSize} )
+		.done(function (data) {
+			$('#gallery').append(data);
+			$('#gallery').justifiedGallery('norewind');
+    		jsPage++;
+		});
+});
+</script>
+</body>
+</html>
