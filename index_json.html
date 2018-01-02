@@ -27,8 +27,17 @@
 <script>
 var jsPage = 0;
 var jsPageSize = 25;
-$.get('paginate.php', {page: jsPage, pagesize: jsPageSize, json: "0"} )
+$.get('paginate.php', {page: jsPage, pagesize: jsPageSize} )
 	.done(function (data) {
+    var parsedJSON = JSON.parse(data);
+    $.getJSON(parsedJSON, function(jsonData) {
+      var html = '';
+      $.each(jsonData, function(key, value) {
+        html += '<a class="swipeboxImg" href="';
+        html += 
+      }
+    }
+    var imgItemTemplate = $.template('<a class="swipeboxImg" href="${imgurl}"><img alt="${alt-text}" src="${imgurl}" /></a>');
 		$('#gallery').append(data);
 		$("#gallery").justifiedGallery()
 			.on('jg.complete', function () {
@@ -38,7 +47,7 @@ $.get('paginate.php', {page: jsPage, pagesize: jsPageSize, json: "0"} )
 	});
 $(':button').click(function() {
 	$(':button').prop('disabled', true);
-	$.get('paginate.php', {page: jsPage, pagesize: jsPageSize, json: "0"} )
+	$.get('paginate.php', {page: jsPage, pagesize: jsPageSize} )
 		.done(function (data) {
 			$('#gallery').append(data);
 			$('#gallery').justifiedGallery('norewind')
