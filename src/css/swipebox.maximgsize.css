@@ -59,7 +59,7 @@ html.swipebox-html.swipebox-touch {
   display: inline-block;
   max-height: 10%;
   max-width: 10%;
-  transform: scale(10); /* https://stackoverflow.com/questions/9994493/scale-image-to-fit-a-bounding-box */
+  transform: scale(10); /* hack to get images to fill window - https://stackoverflow.com/questions/9994493/scale-image-to-fit-a-bounding-box */
   margin: 0;
   padding: 0;
   /*width: 100%;
@@ -275,7 +275,7 @@ html.swipebox-html.swipebox-touch {
     max-width: 800px;
   }
 }
-/* Skin 
+/* Skin
 --------------------------*/
 #swipebox-overlay {
   background: #0d0d0d;
