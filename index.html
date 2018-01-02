@@ -23,7 +23,7 @@
 <body>
 <div id="gallery">
 </div>
-<div><input type="button" class="button" value="Load more..." /></div>
+<div><input id="morebutton" type="button" class="button" value="Load more..." /></div>
 <script>
 var jsPage = 0;
 var jsPageSize = 25;
@@ -36,11 +36,15 @@ $.get('paginate.php', {page: jsPage, pagesize: jsPageSize} )
 				});
 		jsPage++;
 	});
-$(":button").click(function() {
+$(':button').click(function() {
+	$(':button').prop('disabled', true);
 	$.get('paginate.php', {page: jsPage, pagesize: jsPageSize} )
 		.done(function (data) {
 			$('#gallery').append(data);
-			$('#gallery').justifiedGallery('norewind');
+			$('#gallery').justifiedGallery('norewind')
+				.on('jg.complete', function () {
+					$(':button').prop('disabled', false);
+				});
     		jsPage++;
 		});
 });
