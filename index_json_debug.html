@@ -25,8 +25,8 @@
 </div>
 <div><input id="morebutton" type="button" class="button" value="Load more..." /></div>
 <script>
-var jsPage = "all";
-var jsPageSize = 2;
+var jsPage = "0";
+var jsPageSize = 25;
 console.log("Loading page " + jsPage);
 $.getJSON('paginate.php', {page: jsPage, pagesize: jsPageSize, json: "1"}, function(data) {
   var html = '';
@@ -39,7 +39,7 @@ $.getJSON('paginate.php', {page: jsPage, pagesize: jsPageSize, json: "1"}, funct
     .on('jg.complete', function () {
       $('.swipeboxImg').swipebox();
       });
-  //jsPage++;
+  jsPage++;
 });
 $(':button').click(function() {
 	$(':button').prop('disabled', true);
@@ -55,7 +55,7 @@ $(':button').click(function() {
       .on('jg.complete', function () {
         $(':button').prop('disabled', false);
       });
-    //jsPage++;
+    jsPage++;
   });
 });
 </script>
