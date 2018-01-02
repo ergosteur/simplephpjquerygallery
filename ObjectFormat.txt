@@ -1,0 +1,17 @@
+{
+  "filename": "filename.gif"
+  "alt-text": "Alt text"
+}
+
+$images = Array => (
+ [0]=>stdClass Object(
+  [filename]=>Filename.gif
+  [alt-text]=> "alt text"
+  [page]=>1
+ )
+ [1]=>stdClass Object(
+  [filename]=>Filename.gif
+  [alt-text]=> "alt text"
+  [page]=>2
+ )
+)

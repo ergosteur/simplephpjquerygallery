@@ -27,18 +27,17 @@
 <script>
 var jsPage = 0;
 var jsPageSize = 25;
-$.get('paginate.php', {page: jsPage, pagesize: jsPageSize} )
+$.get('paginate.php', {page: jsPage, pagesize: jsPageSize, json: "1"} )
 	.done(function (data) {
+    // create HTML from JSON http://larryullman.com/forums/index.php?/topic/3558-jquery-ajax-how-to-use-json-to-create-new-html-elements/
     var parsedJSON = JSON.parse(data);
     $.getJSON(parsedJSON, function(jsonData) {
       var html = '';
       $.each(jsonData, function(key, value) {
-        html += '<a class="swipeboxImg" href="';
-        html += 
+        html += '<a class="swipeboxImg" href="' + value.url + '"><img alt="' + value.alttext + '" src="' + value.url + '" /></a>';
       }
     }
-    var imgItemTemplate = $.template('<a class="swipeboxImg" href="${imgurl}"><img alt="${alt-text}" src="${imgurl}" /></a>');
-		$('#gallery').append(data);
+		$('#gallery').append(html);
 		$("#gallery").justifiedGallery()
 			.on('jg.complete', function () {
 				$('.swipeboxImg').swipebox();
@@ -49,7 +48,15 @@ $(':button').click(function() {
 	$(':button').prop('disabled', true);
 	$.get('paginate.php', {page: jsPage, pagesize: jsPageSize} )
 		.done(function (data) {
-			$('#gallery').append(data);
+      // create HTML from JSON http://larryullman.com/forums/index.php?/topic/3558-jquery-ajax-how-to-use-json-to-create-new-html-elements/
+      var parsedJSON = JSON.parse(data);
+      $.getJSON(parsedJSON, function(jsonData) {
+        var html = '';
+        $.each(jsonData, function(key, value) {
+          html += '<a class="swipeboxImg" href="' + value.url + '"><img alt="' + value.alttext + '" src="' + value.url + '" /></a>';
+        }
+      }
+  		$('#gallery').append(html);
 			$('#gallery').justifiedGallery('norewind')
 				.on('jg.complete', function () {
 					$(':button').prop('disabled', false);

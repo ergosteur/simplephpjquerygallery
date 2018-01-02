@@ -33,18 +33,42 @@ if ($_GET['random']) {
 $i = 0;
 $j = 0;
 
-# create pagedFilesObj for json output
-$pagedFilesObj->nPages = sizeof($pagedFiles);
-$pagedFilesObj->data = $pagedFiles;
+# create GalleryItem object class
+class GalleryItem {
+	public $url;
+	public $alttext;
+	public $page;
+}
+# create imagesArr array for json output https://stackoverflow.com/questions/8612190/array-of-php-objects
+$imagesArr = [];
+$jMax = sizeof($pagedFiles);
+for ($j = 0; $j <= $jMax; $j++) {
+	foreach ($pagedFiles[$j] as &$filename) {
+		$fileMimeType = $finfo->file($filename, FILEINFO_MIME_TYPE);
+		if (strpos($fileMimeType, "image") !== false) {
+			$imageObj = new GalleryItem();
+			$imageObj->url = $filename;
+			$imageObj->alttext = $filename;
+			$imageObj->page = $j;
+			array_push($imagesArr, $imageObj);
+		}
+	}
+}
+unset($fileMimeType);
 
+# create paged array
+$pagedArr = array();
+foreach($imagesArr as $val){
+	$pagedArr[$val->page][] = (array)$val;
+}
 
 //print_r($files);
 
 if ($json == 1 AND $page == 'all') {
-	echo json_encode($pagedFilesObj);
+	echo json_encode($imagesArr);
 }
 elseif ($json == 1 AND !is_null($page)) {
-	echo json_encode($pagedFiles[$page]);
+	echo json_encode($pagedArr[$page]);
 }
 elseif ($json == 0 OR is_null($json)) {
 	foreach ($pagedFiles[$page] as &$filename) {
@@ -58,6 +82,7 @@ elseif ($json == 0 OR is_null($json)) {
 			}
 			#print_r($filename . " " . $fileMimeType . "\n");
 	}
+	unset($fileMimeType);
 }
 else { echo "nomatch";}
 ?>

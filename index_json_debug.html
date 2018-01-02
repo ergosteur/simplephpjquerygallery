@@ -1,0 +1,63 @@
+<html>
+<head>
+<meta name="viewport" content="width=device-width">
+<meta name="viewport" content="initial-scale=1.0">
+<script src="src/js/jquery-2.2.4.min.js"></script>
+<link rel="stylesheet" href="src/css/justifiedGallery.min.css" />
+<script src="src/js/jquery.justifiedGallery.min.js"></script>
+<script src="src/js/jquery.swipebox.min.js"></script>
+<link rel="stylesheet" href="src/css/swipebox.maximgsize.css">
+<style>
+.button {
+    padding: 10px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    font-size: 16px;
+    width: 200px;
+    margin: auto;
+    cursor: pointer;
+}
+</style>
+</head>
+<body>
+<div id="gallery">
+</div>
+<div><input id="morebutton" type="button" class="button" value="Load more..." /></div>
+<script>
+var jsPage = "all";
+var jsPageSize = 2;
+console.log("Loading page " + jsPage);
+$.getJSON('paginate.php', {page: jsPage, pagesize: jsPageSize, json: "1"}, function(data) {
+  var html = '';
+  $.each(data, function(key, value) {
+    console.log(value.url);
+    html += '<a class="swipeboxImg" href="' + value.url + '"><img alt="' + value.alttext + '" src="' + value.url + '" /></a>';
+  });
+  $('#gallery').append(html);
+  $("#gallery").justifiedGallery()
+    .on('jg.complete', function () {
+      $('.swipeboxImg').swipebox();
+      });
+  //jsPage++;
+});
+$(':button').click(function() {
+	$(':button').prop('disabled', true);
+  console.log("Loading page " + jsPage);
+  $.getJSON('paginate.php', {page: jsPage, pagesize: jsPageSize, json: "1"}, function(data) {
+    var html = '';
+    $.each(data, function(key, value) {
+      console.log(value.url);
+      html += '<a class="swipeboxImg" href="' + value.url + '"><img alt="' + value.alttext + '" src="' + value.url + '" /></a>';
+    });
+    $('#gallery').append(html);
+    $('#gallery').justifiedGallery('norewind')
+      .on('jg.complete', function () {
+        $(':button').prop('disabled', false);
+      });
+    //jsPage++;
+  });
+});
+</script>
+</body>
+</html>
