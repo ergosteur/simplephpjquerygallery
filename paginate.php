@@ -6,6 +6,9 @@ if (empty($_GET)) {
 	$page = 0;
 	$pageSize = 25;
 	}
+elseif ($_GET['random']) {
+	$pageSize = 1;
+}
 else {
 	$page = $_GET['page'];
 	$pageSize = $_GET['pagesize'];
@@ -23,6 +26,10 @@ unset($value);
 
 # break up array by chunks according to arguments
 $pagedFiles = array_chunk($files, $pageSize, true);
+# random page case
+if ($_GET['random']) {
+	$page = rand(0, sizeof($pagedFiles));
+}
 $i = 0;
 $j = 0;
 
@@ -44,7 +51,7 @@ elseif ($json == 0 OR is_null($json)) {
 		$i++;
 		$fileMimeType = $finfo->file($filename, FILEINFO_MIME_TYPE);
 		if (strpos($fileMimeType, "image") !== false AND $i <= $maxi) {
-			echo '<a class="swipeboxImg" href="' . $filename . '"><img alt="'. str_replace($dir,"",$filename) . '" src="' . $filename . '" /></a>'; #remove dir from alt-text
+			echo '<a class="swipeboxImg" href="' . $filename . '"><img title="'.$page.'" alt="'. str_replace($dir,"",$filename) . '" src="' . $filename . '" /></a>'; #remove dir from alt-text
 			}
 			elseif ($i > $maxi) {
 				break;
